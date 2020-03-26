@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttereticket/icons/flutter_icon_icons.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -160,7 +161,7 @@ Widget _loginBtn(context){
         borderRadius: BorderRadius.circular(10.0),
       ),
       onPressed: () {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/ticket-list');
       },
       child: Text(
         "LOG IN",

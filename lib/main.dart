@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'package:fluttereticket/screens/login_screen.dart';
+import 'package:fluttereticket/screens/ticket_list_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,9 +9,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/login',
       title: 'eTicket',
       routes: {
-        '/' : (context) => LoginScreen(),
+        '/login' : (context) => LoginScreen(),
+        '/ticket-list' : (context) => TicketListScreen(),
       },
       theme: ThemeData(
         primaryColor: Color(0xFFE2E2E2),
