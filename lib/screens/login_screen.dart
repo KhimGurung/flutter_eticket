@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttereticket/icons/flutter_icon_icons.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -57,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 )
               ],
-      ),
+            ),
           ),
         )
     );
