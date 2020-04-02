@@ -114,7 +114,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: AssetImage("assets/images/gn.jpeg")
+                                      image: AssetImage("assets/images/"+widget.ticket.logo)
                                   )
                               ),
                             ),

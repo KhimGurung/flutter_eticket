@@ -5,6 +5,7 @@ import 'package:fluttereticket/models/travelTickets.dart';
 
 List<dynamic> tickets = [
   ShowTicket(
+      logo: "ic.jpeg",
       ticketId: "29865743",
       purchaseDate: "12.11.2019",
       title: "Internatinal Cineplex",
@@ -20,6 +21,7 @@ List<dynamic> tickets = [
       used: false
   ),
   PartyTicket(
+      logo: "ny.jpeg",
       ticketId: "29865743",
       purchaseDate: "12.11.2019",
       title: "New Year Party",
@@ -33,6 +35,7 @@ List<dynamic> tickets = [
       used: false
   ),
   ShowTicket(
+      logo: "ic.jpeg",
       ticketId: "29865743",
       purchaseDate: "12.11.2019",
       title: "Internatinal Cineplex",
@@ -48,6 +51,7 @@ List<dynamic> tickets = [
       used: false
   ),
   TravelTicket(
+      logo: "rmv.jpeg",
       ticketId: "29865743",
       title: "Day Ticket",
       transportation: "RMV Bus",
@@ -60,6 +64,7 @@ List<dynamic> tickets = [
       used: true
   ),
   VisitTicket(
+      logo: "bmw.jpeg",
       ticketId: "29865743",
       purchaseDate: "12.11.2019",
       title: "BMW Museum",
@@ -73,6 +78,7 @@ List<dynamic> tickets = [
       used: true
   ),
   PartyTicket(
+      logo: "sn.jpeg",
       ticketId: "29865743",
       purchaseDate: "12.11.2019",
       title: "New Year Party",
@@ -86,6 +92,7 @@ List<dynamic> tickets = [
       used: false
   ),
   VisitTicket(
+      logo: "ic.jpeg",
       ticketId: "29865743",
       purchaseDate: "12.11.2019",
       title: "Frankfurt Tower",
@@ -99,6 +106,7 @@ List<dynamic> tickets = [
       used: false
   ),
   ShowTicket(
+      logo: "ic.jpeg",
       ticketId: "29865743",
       purchaseDate: "12.11.2019",
       title: "Internatinal Cineplex",

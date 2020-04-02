@@ -1,6 +1,7 @@
 import 'package:fluttereticket/models/tickets.dart';
 
 class TravelTicket{
+  String logo;
   String ticketId;
   String title;
   String transportation;
@@ -13,6 +14,7 @@ class TravelTicket{
   bool used;
 
   TravelTicket({
+    this.logo,
     this.ticketId,
     this.title,
     this.transportation,
@@ -26,6 +28,7 @@ class TravelTicket{
   });
 
   Map<String, dynamic> toJson() => {
+    'logo' : logo,
     'ticketId' : ticketId,
     'title' : title,
     'transportation' : transportation,
