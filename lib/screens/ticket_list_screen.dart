@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttereticket/icons/flutter_icon_icons.dart';
 import 'package:fluttereticket/models/tickets.dart';
@@ -225,28 +226,42 @@ class _TicketListScreenState extends State<TicketListScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        QrImage(
-                          data: 'eticket',
-                          version: QrVersions.auto,
-                          size: 67,
-                          gapless: false,
+                      children: [
+                        Stack(
+                          overflow: Overflow.visible,
+                          children: <Widget>[
+                            Opacity(
+                              opacity: ticket.valid ? 1 : 0.5,
+                              child: QrImage(
+                                data: 'eticket',
+                                version: QrVersions.auto,
+                                size: 67,
+                                gapless: false,
+                              ),
+                            ),
+                            if(ticket.valid == false)
+                              Positioned(
+                                  top: -9,
+                                  left: -5,
+                                  child: _renderTicketStatus(ticket.used)
+                              )
+                          ],
                         ),
                         Text(
                           "N0. "+ticket.ticketId,
                           style: TextStyle(
                               fontSize: 10,
-                            fontWeight: FontWeight.w300
+                              fontWeight: FontWeight.w300
                           ),
                         ),
                       ],
                     )
                 ),
                 Expanded(
-                    flex: 7,
+                    flex: 10,
                     child: Stack(
                       children:<Widget>[
                         Align(
@@ -255,7 +270,19 @@ class _TicketListScreenState extends State<TicketListScreen> {
                             image: _ticketCategoryIcon(ticket),
                           ),
                         ),
-                        _renderTicketInfo(ticket)
+
+                        if(ticket is ShowTicket)
+                          _renderShowTicket(ticket),
+
+                        if(ticket is VisitTicket)
+                          _renderVisitTicket(ticket),
+
+                        if(ticket is PartyTicket)
+                          _renderPartyTicket(ticket),
+
+                        if(ticket is TravelTicket)
+                          _renderTravelTicket(ticket)
+
                       ]
                     ),
                 ),
@@ -267,481 +294,525 @@ class _TicketListScreenState extends State<TicketListScreen> {
     );
   }
 
-  Widget _renderTicketInfo(dynamic ticket){
+  Widget _renderPartyTicket(PartyTicket ticket){
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        onTap: (){ Navigator.of(context).pushNamed( "/ticket-detail", arguments: ticket ); },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB (15.0, 8.0, 8.0, 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Flexible(
+                    child: Text(
+                      ticket.title,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 22,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: Theme.of(context).primaryColor
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
+                      child: Center(
+                        child: Text(
+                          "PRICE : €"+ticket.price,
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).accentColor
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Text(
+                "artist : "+ticket.artist.toUpperCase(),
+                style: TextStyle(
+                    fontSize: 12,
+                    color : Theme.of(context).primaryColor
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "date : ",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        ticket.date,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "time : ",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        ticket.startTime+"/"+ticket.endTime,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                ticket.address,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 12
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-    if(ticket is ShowTicket){
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                  child: Text(
-                    ticket.hallName,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor
+  Widget _renderVisitTicket(VisitTicket ticket){
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        onTap: (){ Navigator.pushNamed(context, "/ticket-detail", arguments: ticket ); },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB (15.0, 8.0, 8.0, 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Flexible(
+                    child: Text(
+                      ticket.title,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  height: 22,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      color: Theme.of(context).primaryColor
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
-                    child: Center(
-                      child: Text(
-                        "PRICE : €"+ticket.price,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).accentColor
+                  Container(
+                    height: 22,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: Theme.of(context).primaryColor
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
+                      child: Center(
+                        child: Text(
+                          "PRICE : €"+ticket.price,
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).accentColor
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
-            Text(
-              "show : "+ticket.showTitle.toUpperCase(),
-              style: TextStyle(
-                  fontSize: 12,
-                  color : Theme.of(context).primaryColor
+                  )
+                ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "theater",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    ),
-                    Text(
-                      ticket.theater,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "seat",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    ),
-                    Text(
-                      ticket.row+"/"+ticket.column,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "date : "+ticket.showDate,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    ),
-                    Text(
-                      "time : "+ticket.showTime,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-            Text(
-              ticket.hallAddress,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 12
-              ),
-            )
-          ],
-        ),
-      );
-    } else if(ticket is PartyTicket){
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                  child: Text(
-                    ticket.title,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 22,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      color: Theme.of(context).primaryColor
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
-                    child: Center(
-                      child: Text(
-                        "PRICE : €"+ticket.price,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).accentColor
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Text(
-              "artist : "+ticket.artist.toUpperCase(),
-              style: TextStyle(
-                  fontSize: 12,
-                  color : Theme.of(context).primaryColor
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "date : ",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    ),
-                    Text(
-                      ticket.date,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "time : ",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    ),
-                    Text(
-                      ticket.startTime+"/"+ticket.endTime,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            Text(
-              ticket.address,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 12
-              ),
-            )
-          ],
-        ),
-      );
-    }else if(ticket is VisitTicket){
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                  child: Text(
-                    ticket.siteName,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 22,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      color: Theme.of(context).primaryColor
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
-                    child: Center(
-                      child: Text(
-                        "PRICE : €"+ticket.price,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).accentColor
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "opeaning hour",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    ),
-                    Text(
-                      ticket.openTime+"/"+ticket.closeTime,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "last entry",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    ),
-                    Text(
-                      ticket.lastEntry,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 12
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            Text(
-              ticket.address,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 12
-              ),
-            )
-          ],
-        ),
-      );
-    }else{
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                  child: Column(
+              Row(
+                children: <Widget>[
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        ticket.ticketType,
+                        "opeaning hour",
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
                         ),
                       ),
                       Text(
-                        ticket.transportation,
+                        ticket.openTime+"/"+ticket.closeTime,
                         style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).primaryColor
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
                         ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "last entry",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        ticket.lastEntry,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                ticket.address,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 12
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _renderTravelTicket(TravelTicket ticket){
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        onTap: (){ Navigator.pushNamed(context, "/ticket-detail", arguments: ticket ); },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB (15.0, 8.0, 8.0, 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          ticket.title,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor
+                          ),
+                        ),
+                        Text(
+                          ticket.transportation,
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).primaryColor
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 22,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: Theme.of(context).primaryColor
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
+                      child: Center(
+                        child: Text(
+                          "PRICE : €"+ticket.price,
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).accentColor
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "von : ",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          ),
+                          Text(
+                            ticket.from,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "über : ",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          ),
+                          Text(
+                            ticket.through,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
-                ),
-                Container(
-                  height: 22,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      color: Theme.of(context).primaryColor
+                  SizedBox(
+                    width: 30,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
-                    child: Center(
-                      child: Text(
-                        "PRICE : €"+ticket.price,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).accentColor
-                        ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "nach : ",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          ),
+                          Text(
+                            ticket.to,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "Preisstufe : ",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          ),
+                          Text(
+                            ".",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 12
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                "Gültig am: "+ticket.purchaseDate,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 12
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _renderShowTicket(ShowTicket ticket){
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        onTap: (){ Navigator.pushNamed(context, "/ticket-detail", arguments: ticket ); },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB (15.0, 8.0, 8.0, 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Flexible(
+                    child: Text(
+                      ticket.title,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "von : ",
+                  Container(
+                    height: 22,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: Theme.of(context).primaryColor
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical:0.0, horizontal: 5.0),
+                      child: Center(
+                        child: Text(
+                          "PRICE : €"+ticket.price,
                           style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
+                              fontSize: 12,
+                              color: Theme.of(context).accentColor
                           ),
                         ),
-                        Text(
-                          ticket.from,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "über : ",
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
-                          ),
-                        ),
-                        Text(
-                          ticket.through,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "nach : ",
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
-                          ),
-                        ),
-                        Text(
-                          ticket.to,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "Preisstufe : ",
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
-                          ),
-                        ),
-                        Text(
-                          ".",
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Text(
-              "Gültig am: "+ticket.purchaseDate,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 12
+                  )
+                ],
               ),
-            )
-          ],
+              Text(
+                "show : "+ticket.showTitle.toUpperCase(),
+                style: TextStyle(
+                    fontSize: 12,
+                    color : Theme.of(context).primaryColor
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "theater",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        ticket.theater,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "seat",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        ticket.row+"/"+ticket.column,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "date : "+ticket.showDate,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        "time : "+ticket.showTime,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              Text(
+                ticket.hallAddress,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 12
+                ),
+              )
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _renderTicketStatus(bool used){
+    if(used){
+      return Image(
+        height: 60,
+        image: AssetImage("assets/images/used.png"),
+      );
+    }else{
+      return Image(
+        height: 60,
+        image: AssetImage("assets/images/expired.png"),
       );
     }
-
   }
 
   Widget _drawerNavigation(context){

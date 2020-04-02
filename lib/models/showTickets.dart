@@ -2,7 +2,8 @@ import 'package:fluttereticket/models/tickets.dart';
 
 class ShowTicket{
   String ticketId;
-  String hallName;
+  String purchaseDate;
+  String title;
   String hallAddress;
   String showTitle;
   String theater;
@@ -16,7 +17,8 @@ class ShowTicket{
 
   ShowTicket({
     this.ticketId,
-    this.hallName,
+    this.purchaseDate,
+    this.title,
     this.hallAddress,
     this.showTitle,
     this.theater,
@@ -28,4 +30,20 @@ class ShowTicket{
     this.valid,
     this.used
   });
+
+  Map<String, dynamic> toJson() => {
+    'ticketId' : ticketId,
+    'purchaseDate' : purchaseDate,
+    'title' : title,
+    'hallAddress' : hallAddress,
+    'showTitle' : showTitle,
+    'theater' : theater,
+    'row' : row,
+    'column' : column,
+    'showDate' : showDate,
+    'showTime' : showTime,
+    'price' : price,
+    'valid' : valid,
+    'used' : used,
+  };
 }

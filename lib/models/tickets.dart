@@ -6,7 +6,8 @@ import 'package:fluttereticket/models/travelTickets.dart';
 List<dynamic> tickets = [
   ShowTicket(
       ticketId: "29865743",
-      hallName: "Internatinal Cineplex",
+      purchaseDate: "12.11.2019",
+      title: "Internatinal Cineplex",
       hallAddress: "Am Olympiapark 2, 80809 Müchen",
       showTitle: "Lord of the Rings",
       theater: "01",
@@ -20,6 +21,7 @@ List<dynamic> tickets = [
   ),
   PartyTicket(
       ticketId: "29865743",
+      purchaseDate: "12.11.2019",
       title: "New Year Party",
       address: "Zeil 9, 9058 Frankfurt",
       artist: "The Amazing Spiderman",
@@ -32,7 +34,8 @@ List<dynamic> tickets = [
   ),
   ShowTicket(
       ticketId: "29865743",
-      hallName: "Internatinal Cineplex",
+      purchaseDate: "12.11.2019",
+      title: "Internatinal Cineplex",
       hallAddress: "Am Olympiapark 2, 80809 Müchen",
       showTitle: "Lord of the Rings",
       theater: "01",
@@ -46,7 +49,7 @@ List<dynamic> tickets = [
   ),
   TravelTicket(
       ticketId: "29865743",
-      ticketType: "Day Ticket",
+      title: "Day Ticket",
       transportation: "RMV Bus",
       from: "5000",
       to: "5000",
@@ -58,17 +61,20 @@ List<dynamic> tickets = [
   ),
   VisitTicket(
       ticketId: "29865743",
-      siteName: "BMW Museum",
+      purchaseDate: "12.11.2019",
+      title: "BMW Museum",
       address: "Am Olympiapark 2, 80809 Müchen",
       openTime: "09:00",
       closeTime: "19:00",
       lastEntry: "18:00",
       price: "5",
+      validity: "Ticket is for one time use after purchase",
       valid: false,
       used: true
   ),
   PartyTicket(
       ticketId: "29865743",
+      purchaseDate: "12.11.2019",
       title: "New Year Party",
       address: "Zeil 9, 9058 Frankfurt",
       artist: "The Amazing Spiderman",
@@ -81,18 +87,21 @@ List<dynamic> tickets = [
   ),
   VisitTicket(
       ticketId: "29865743",
-      siteName: "Frankfurt Tower",
+      purchaseDate: "12.11.2019",
+      title: "Frankfurt Tower",
       address: "Am Olympiapark 2, 80809 Müchen",
       openTime: "09:00",
       closeTime: "19:00",
       lastEntry: "18:00",
       price: "5",
+      validity: "Ticket is for one time use after purchase",
       valid: false,
       used: false
   ),
   ShowTicket(
       ticketId: "29865743",
-      hallName: "Internatinal Cineplex",
+      purchaseDate: "12.11.2019",
+      title: "Internatinal Cineplex",
       hallAddress: "Am Olympiapark 2, 80809 Müchen",
       showTitle: "Lord of the Rings",
       theater: "01",

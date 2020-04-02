@@ -2,6 +2,7 @@ import 'package:fluttereticket/models/tickets.dart';
 
 class PartyTicket{
   String ticketId;
+  String purchaseDate;
   String title;
   String address;
   String artist;
@@ -14,6 +15,7 @@ class PartyTicket{
 
   PartyTicket({
     this.ticketId,
+    this.purchaseDate,
     this.title,
     this.address,
     this.artist,
@@ -24,4 +26,18 @@ class PartyTicket{
     this.valid,
     this.used
   });
+
+  Map<String, dynamic> toJson() => {
+    'ticketId' : ticketId,
+    'purchaseDate' : purchaseDate,
+    'title' : title,
+    'address' : address,
+    'artist' : artist,
+    'date' : date,
+    'startTime' : startTime,
+    'endTime' : endTime,
+    'price' : price,
+    'valid' : valid,
+    'used' : used,
+  };
 }
