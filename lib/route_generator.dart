@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttereticket/main.dart';
-import 'package:fluttereticket/screens/login_screen.dart';
-import 'package:fluttereticket/screens/ticket_detail_screen.dart';
-import 'package:fluttereticket/screens/ticket_list_screen.dart';
+import 'package:fluttereticket/screens/login/login_screen.dart';
+import 'package:fluttereticket/screens/ticket_detail/ticket_detail_screen.dart';
+import 'package:fluttereticket/screens/ticket_list/ticket_list_screen.dart';
 
 class RouteGenerator{
   static Route<dynamic> generateRoute(RouteSettings settings){

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttereticket/screens/login_screen.dart';
-import 'package:fluttereticket/screens/ticket_list_screen.dart';
-import 'package:fluttereticket/screens/ticket_detail_screen.dart';
 import 'package:fluttereticket/route_generator.dart';
 
 void main() => runApp(MyApp());

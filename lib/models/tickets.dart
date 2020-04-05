@@ -1,7 +1,7 @@
-import 'package:fluttereticket/models/showTickets.dart';
-import 'package:fluttereticket/models/partyTickets.dart';
-import 'package:fluttereticket/models/visitTickets.dart';
-import 'package:fluttereticket/models/travelTickets.dart';
+import 'package:fluttereticket/models/show_tickets.dart';
+import 'package:fluttereticket/models/party_tickets.dart';
+import 'package:fluttereticket/models/visit_tickets.dart';
+import 'package:fluttereticket/models/travel_tickets.dart';
 
 List<dynamic> tickets = [
   ShowTicket(
