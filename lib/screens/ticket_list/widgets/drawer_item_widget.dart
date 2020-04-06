@@ -4,8 +4,14 @@ class DrawerItem extends StatelessWidget {
 
   final String title;
   final IconData icon;
+  final String route;
 
-  const DrawerItem({this.title, this.icon});
+  const DrawerItem(
+      {
+        this.title,
+        this.icon,
+        this.route,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +34,10 @@ class DrawerItem extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.of(context).pop();
+        if(route != null && route.isNotEmpty)
+          Navigator.pushNamed(context, route);
+        else
+          Navigator.pop(context);
       },
     );
   }

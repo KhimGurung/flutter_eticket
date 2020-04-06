@@ -30,7 +30,6 @@ class _TicketListScreenState extends State<TicketListScreen> {
     Function  _selectTicketTab = (int btnId){
       setState((){
         if(btnId == 1){
-          print("from valid ui");
           _indicatorWidth = 70;
           _indicatorX = 16;
           ticketBloc.ticketFilterSink.add(TicketFilterEvent.valid);

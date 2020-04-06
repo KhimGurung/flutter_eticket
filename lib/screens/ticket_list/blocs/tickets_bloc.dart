@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:fluttereticket/repositories/ticket_repository.dart';
+import 'package:rxdart/rxdart.dart';
 
 enum TicketFilterEvent{
   valid,
@@ -16,7 +17,7 @@ class TicketBloc{
   final ticketFilterController = StreamController<TicketFilterEvent>();
 
   Stream<UnmodifiableListView<dynamic>> get ticketListStream => ticketListController.stream;
-  final ticketListController = StreamController<UnmodifiableListView<dynamic>>();
+  final ticketListController = BehaviorSubject<UnmodifiableListView<dynamic>>();
   
   TicketBloc(){
 
