@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttereticket/models/tickets.dart';
+import 'package:fluttereticket/screens/ticket_list/bloc_providers/tickets_bloc_provider.dart';
+import 'package:fluttereticket/screens/ticket_list/blocs/tickets_bloc.dart';
 import 'package:fluttereticket/screens/ticket_list/widgets/drawer_navigation_widget.dart';
 import 'package:fluttereticket/screens/ticket_list/widgets/tab_button_widget.dart';
 import 'package:fluttereticket/screens/ticket_list/widgets/ticket_widget.dart';
@@ -22,20 +25,24 @@ class _TicketListScreenState extends State<TicketListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ticketBloc = TicketProvider.of(context);
 
-    Function  _selectTicketTab = (int validity){
+    Function  _selectTicketTab = (int btnId){
       setState((){
-        if(validity == 1){
+        if(btnId == 1){
           _indicatorWidth = 70;
           _indicatorX = 16;
+          ticketBloc.ticketFilterSink.add(TicketFilterEvent.valid);
         }
-        if(validity == 2){
+        else if(btnId == 2){
           _indicatorWidth = 90;
           _indicatorX = 106;
+          ticketBloc.ticketFilterSink.add(TicketFilterEvent.expired);
         }
-        if(validity == 3){
+        else if(btnId == 3){
           _indicatorWidth = 50;
           _indicatorX = 216;
+          ticketBloc.ticketFilterSink.add(TicketFilterEvent.all);
         }
       });
     };
@@ -125,20 +132,25 @@ class _TicketListScreenState extends State<TicketListScreen> {
               Container(
                 child: Flexible(
                   flex: 1,
-                  child: ListView.builder(
-                    itemCount: tickets.length,
-                    itemBuilder: (context, index){
-
-                      if(tickets[index] is ShowTicket){
-                        return Ticket(ticket: tickets[index]);
-                      } else if(tickets[index] is TravelTicket){
-                        return Ticket(ticket: tickets[index]);
-                      }else if(tickets[index] is VisitTicket){
-                        return Ticket(ticket: tickets[index]);
-                      }else{
-                        return Ticket(ticket: tickets[index]);
-                      }
-                    },
+                  child: StreamBuilder<UnmodifiableListView<dynamic>>(
+                    stream: ticketBloc.ticketListStream,
+                    initialData: UnmodifiableListView<dynamic>([]),
+                    builder: (context, snapshot) {
+                      return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index){
+                          if(snapshot.data[index] is ShowTicket){
+                            return Ticket(ticket: snapshot.data[index]);
+                          } else if(snapshot.data[index] is TravelTicket){
+                            return Ticket(ticket: snapshot.data[index]);
+                          }else if(snapshot.data[index] is VisitTicket){
+                            return Ticket(ticket: snapshot.data[index]);
+                          }else{
+                            return Ticket(ticket: snapshot.data[index]);
+                          }
+                        },
+                      );
+                    }
                   ),
                 ),
               ),

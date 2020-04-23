@@ -42,7 +42,8 @@ class DrawerNavigation extends StatelessWidget {
           ),
           DrawerItem(
             title: "Logout",
-            icon: FlutterIcon.logout_1
+            icon: FlutterIcon.logout_1,
+            route: "/login",
           ),
         ],
       ),
